@@ -1,0 +1,17 @@
+{
+  "name": "ms_node-mongo-react-gql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Toufiq <burningraven06@gmail.com> (https://twitter.com/burningraven06)",
+  "license": "MIT",
+  "scripts": {
+    "watch-js": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.1.1"
+  }
+}
