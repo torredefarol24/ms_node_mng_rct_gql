@@ -4,6 +4,8 @@ const graphQLHttp = require('express-graphql');
 const { buildSchema } = require("graphql");
 const mongoose = require('mongoose');
 const EventModel = require('./models/event');
+const UserModel = require("./models/user");
+const bcrypt = require("bcryptjs");
 const app = express();
 
 
@@ -21,6 +23,18 @@ app.use("/graphql", graphQLHttp({
 			date : String!
 		}
 
+		type User {
+			_id : ID!
+			email : String!
+			password : String
+			event : [Event]
+		}
+
+		input UserInput {
+			email : String!
+			password : String
+		}
+
 		input EventInput {
 			title : String!
 			description : String!
@@ -34,6 +48,7 @@ app.use("/graphql", graphQLHttp({
 
 		type RootMutation {
 			createEvent(eventInput: EventInput) : Event
+			createUser(userInput: UserInput) : User
 		}
 
 		schema {
@@ -59,17 +74,66 @@ app.use("/graphql", graphQLHttp({
 				title : args.eventInput.title,
 				description : args.eventInput.description,
 				price : +args.eventInput.price,
-				date: args.eventInput.date
+				date: args.eventInput.date,
+				creator : "5c86648fba242b4d42dea4b9"
 			});
+
+			let createdEvent;
 
 			return event.save()
 			.then( result => {
-				return { ...result._doc};
+				createdEvent = { ...result._doc}
+
+				return UserModel.findById("5c86648fba242b4d42dea4b9")
+				.then(user => {
+					if (!user){
+						throw new Error("User Doesnt Exist")
+					}
+
+					user.createdEvents.push(event)
+					return user.save()
+				})
+			})
+			.then(result => {
+				return createdEvent;
 			})
 			.catch(err => {
 				console.log("event creation error ", err);
 				throw err;
 			})
+		},
+		createUser : (args) => {
+
+			return UserModel.findOne({ email : args.userInput.email})
+			.then(user => {
+				if (user) {
+					throw new Error("User Exists Already")
+				}
+				
+				return bcrypt.hash(args.userInput.password, 12)
+			})
+			.then(passHash => {
+
+				const user = new UserModel({
+					email : args.userInput.email,
+					password : passHash
+				})
+
+				return user.save()
+				.then(result => {
+					return { ...result._doc, password : null}
+				})
+				.catch(err => {
+					console.log("User creation error ", err)
+					throw err
+				})
+
+			})
+			.catch(err => {
+				console.log("Hashing error ", err)
+				throw err
+			})
+			
 		}
 	},
 	graphiql : true
