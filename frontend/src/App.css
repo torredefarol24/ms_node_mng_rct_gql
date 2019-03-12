@@ -1,5 +1,5 @@
-.body{
-  font-family: sans-serif;
+body{
+  font-family: 'Noto Sans JP', sans-serif;
   padding : 32px
 }
 
@@ -56,4 +56,74 @@ li a:hover {
 
 .mt16{
   margin-top: 16px
+}
+
+
+.events-control {
+  text-align: center;
+  border: 1px solid #333333;
+  padding: 1rem;
+  margin: 2rem auto;
+  width: 30rem;
+  max-width: 80%;
+}
+
+.backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.75);
+  }
+
+.modal {
+	width: 90%;
+	background: white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	position: fixed;
+	top: 20vh;
+	left: 5%;
+  }
+  
+  .modal__header {
+	padding: 1rem;
+	background: #777777;
+	color: white;
+  }
+  
+  .modal__header h1 {
+	margin: 0;
+	font-size: 1.25rem;
+  }
+  
+  .modal__content {
+	padding: 1rem;
+  }
+  
+  .modal__actions {
+	display: flex;
+	justify-content: flex-end;
+	padding: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+	.modal {
+	  width: 30rem;
+	  left: calc((100% - 30rem) / 2);
+	}
+  }
+
+.events__list {
+  width: 40rem;
+  max-width: 90%;
+  margin: 2rem auto;
+  list-style: none;
+  padding: 0;
+}
+
+.events__list-item {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #4b4b4b;
 }

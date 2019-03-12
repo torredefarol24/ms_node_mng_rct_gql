@@ -26,7 +26,10 @@ class App extends Component {
   }
 
   logout = () => {
-
+    this.setState({
+      token : null,
+      userId : null
+    })
   }
 
   render() {
@@ -44,8 +47,9 @@ class App extends Component {
             <MainNavigation />
             <Switch>
               
-              {!this.state.token && <Redirect from="/" to="/auth" exact/>}
               {!this.state.token && <Route path="/auth" component = {AuthPage} />}
+              {!this.state.token && <Redirect from="bookings" to="/auth" exact/>}
+
 
               <Route path="/events" component = {EventPage} />
               {this.state.token && <Route path="/bookings" component = {BookingPage} />}
